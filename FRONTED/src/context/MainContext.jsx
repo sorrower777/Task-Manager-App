@@ -21,7 +21,11 @@ export const MainContextProvider = ({children}) => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token") || '';
-      if(!token) return;
+      if(!token){
+        setUser(null);
+        setLoading(false);
+        return;
+      }
       const response = await axiosClient.get("/profile", {
         headers:{
           user: token

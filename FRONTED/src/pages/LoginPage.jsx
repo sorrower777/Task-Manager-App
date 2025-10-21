@@ -20,10 +20,10 @@ const LoginPage = () => {
       // console.log(values);
       const response = await axiosClient.post("/login", values);
       const data = await response.data;
-      toast.success(data.message);
-  localStorage.setItem("token", data.token);
-  // refresh user in context so Navbar updates immediately
-  await refreshProfile();
+    toast.success(data.message);
+    localStorage.setItem("token", data.token);
+    // refresh user in context so Navbar updates immediately
+    await refreshProfile();
       helpers.resetForm();
       navigate("/");
       // Your register logic here

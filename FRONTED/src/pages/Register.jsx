@@ -7,12 +7,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
 import { toast } from 'react-toastify'
 import { axiosClient } from '../utils/axiosClient.js'
+import { useMainContext } from '../context/mainContextCore.js'
 
 
 const RegisterPage = () => {
   const [isHide , setIsHide] = useState(true);
   const [Loading , setLoading] = useState(false);
   const navigate = useNavigate();
+  const { refreshProfile } = useMainContext();
   const onSubmitHandler = async(values, helpers) =>{
     try{
       setLoading(true);
@@ -20,6 +22,11 @@ const RegisterPage = () => {
       const response = await axiosClient.post("/register", values);
       const data = await response.data;
       toast.success(data.message);
+      // store token and refresh profile
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+        await refreshProfile();
+      }
       helpers.resetForm();
       navigate("/");
       // Your register logic here

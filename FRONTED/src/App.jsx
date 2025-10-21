@@ -8,6 +8,8 @@ import Footer from './components/Footer.jsx'
 import Errorpage from './pages/Errorpage.jsx'
 import {MainContextProvider} from './context/MainContext.jsx'
 import { ToastContainer } from 'react-toastify'
+import ProtectedLayout from './layout/ProtectedLayout.jsx'
+import AddTaskPage from './pages/AddTaskPage.jsx'
 
 const App = () => {
   return (
@@ -17,7 +19,10 @@ const App = () => {
         <ToastContainer />
         <Navbar />
           <Routes>
-            <Route path = '/' Component={Dashboard}/>
+            <Route Component={ProtectedLayout}>
+              <Route path = '/' Component={Dashboard}/>
+              <Route path = '/add-task' Component={AddTaskPage}/>
+            </Route>
             <Route path = '/login' Component={LoginPage}/>
             <Route path = '/register' Component={RegisterPage}/>
             <Route path = '*' Component={Errorpage}/>

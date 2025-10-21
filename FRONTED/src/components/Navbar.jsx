@@ -15,9 +15,19 @@ const Navbar = () => {
 
           { !user ? <Link to = {'/login'} className="px-4 py-2 bg-indigo-600 text-white rounded-sm cursor-pointer">
             Login
-          </Link> : <button onClick={logoutHandler} className="px-4 py-2 bg-indigo-600 text-white rounded-sm cursor-pointer">
-            Logout
-          </button>}
+          </Link> : 
+          <ul className="flex items-center gap-x-2">
+            <li>
+              <Link to = {'/add-task'}  className="px-4 py-2 cursor-pointer rounded-sm border border-transparent hover:border-indigo-500 hover:text-indigo-500 transition-all duration-300">Add Task</Link>
+            </li>
+            <li>
+              <button onClick={logoutHandler} className="px-4 py-2 bg-indigo-600 text-white rounded-sm cursor-pointer">
+                Logout
+              </button>
+            </li>
+
+          </ul>
+          }
         </div>
       </header>
     </>
