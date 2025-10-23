@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: task-manager-api
+    env: node
+    rootDir: BACKEND
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: NODE_VERSION
+        value: 20
+
+  - type: static
+    name: task-manager-frontend
+    rootDir: FRONTED
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          name: task-manager-api
+          type: web
+          property: url
