@@ -10,10 +10,10 @@ const ProtectedLayout = () => {
     useEffect(() =>{
         if(!user){
             navigate('/login');
-        }
-        else{
             setLoading(false);
+            return;
         }
+        setLoading(false);
     }, [user, navigate] )
     if(loading){
         return <LoaderComponent/>

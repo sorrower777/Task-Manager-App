@@ -1,28 +1,29 @@
 import React from 'react'
 import { FaArrowRight } from 'react-icons/fa'
 import { taskCategories } from '../utils/constant.js'
+import TaskViewModel from './TaskViewModel.jsx'
 
-const TaskCard = () => {
-    const category = 'study';
-    const categoryClass = taskCategories[category]
+const TaskCard = ({ task }) => {
+  const category = (task?.category || 'other').toLowerCase()
+  const categoryClass = taskCategories[category] || taskCategories['other']
   return (
-    <>
-        <div>
-            <input type="text" className="w-full py-3 px-4" />
-        </div>
+    <div className="w-full bg-white rounded shadow py-3 px-3" data-aos="fade-zoom-in"
+     data-aos-easing="ease-in-back"
+     data-aos-delay="300"
+     data-aos-offset="0">
+      <p className="text-2xl font-bold break-words">{task?.title || 'Untitled task'}</p>
 
-      <div className="w-full bg-white rounded shadow py-3 px-3">
-        <p className="text-3xl font-bold">Task Name</p>
+      {task?.description && (
+        <p className='mt-2 font-semibold text-sm text-zinc-600 bg-gray-100 px-3 py-2 rounded-2xl break-words'>
+          {task.description}
+        </p>
+      )}
 
-        <p className='font-semibold text-sm text-zinc-400 bg-gray-100 px-3 rounded-2xl '>Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
-            Tempora eveniet praesentium eaque repudiandae! Fuga distinctio, explicabo culpa ipsa modi consequatur provident error quis accusamus ipsum placeat fugit! Quae, numquam doloribus.</p>
-
-        <div className='py-3 flex justify-between items-center'>
-            <span className= {`${categoryClass} capitalize` }>{category}</span>
-            <button className="px-5 py-2 text-white rounded-full flex items-center justify-center gap-x-2 bg-indigo-500 cursor-pointer"><span>View</span><FaArrowRight/></button>
-        </div>
+      <div className='py-3 flex justify-between items-center'>
+        <span className={`${categoryClass} capitalize`}>{category}</span>
+        <TaskViewModel id={task._id}/>
       </div>
-    </>
+    </div>
   )
 }
 

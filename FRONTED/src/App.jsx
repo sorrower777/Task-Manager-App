@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {BrowserRouter , Routes, Route} from 'react-router-dom'
 import Dashboard from './pages/Dashboard.jsx'
 import LoginPage from './pages/LoginPage.jsx'
@@ -10,8 +10,14 @@ import {MainContextProvider} from './context/MainContext.jsx'
 import { ToastContainer } from 'react-toastify'
 import ProtectedLayout from './layout/ProtectedLayout.jsx'
 import AddTaskPage from './pages/AddTaskPage.jsx'
+import Aos from 'aos'
+import 'aos/dist/aos.css'
 
 const App = () => {
+  useEffect(() => {
+    Aos.init();
+    Aos.refresh();
+  }, []);
   return (
     <>
       <BrowserRouter>

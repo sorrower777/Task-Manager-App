@@ -8,14 +8,14 @@ import CustomLoaderButton from '../components/CustomLoaderButton.jsx'
 import { axiosClient } from '../utils/axiosClient.js'
 import { useMainContext } from '../context/mainContextCore.js'
 
-const AddTaskPage = () => {
+const TaskUpdateView = ({data , fetchData, close}) => {
     const categories = Object.keys(taskCategories);
     const { fetchedAllTasks } = useMainContext();
     const [loading, setLoading] = useState(false)
     const initialValues = {
-        title:'',
-        description:'',
-        category:''
+        title:data.title ||'',
+        description:data.description || '',
+        category:data.category || ''
     }
     const validationSchema = yup.object({
         title: yup.string().required("Title is required"),
@@ -25,16 +25,17 @@ const AddTaskPage = () => {
     const onSubmitHandler = async(values, helpers) => {
         try{
             setLoading(true)
-            const response = await axiosClient.post("/add-task", values,{
+            const response = await axiosClient.put(`/task/${data._id}`, values,{
                 headers:{
                     'user': localStorage.getItem('token') || ''
                 },
             })
-            const data = await response.data
-            toast.success(data.message)
+            const res = await response.data
+            toast.success(res.message)
             // Refresh tasks in context so Dashboard reflects the new task
             await fetchedAllTasks();
-            helpers.resetForm();
+            await fetchData();
+            close()
         }
         catch(error){
             toast.error(error.response.data.error || error.message);
@@ -49,8 +50,8 @@ const AddTaskPage = () => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmitHandler}>
-            <Form className="bg-white rounded shadow lg:w-[70%] mx-auto my-10 lg:px-10 px-3 py-10">
-                <h1 className='text-start text-4xl font-bold'>Add Task</h1>
+            <Form className=" mx-auto my-10 px-3 ">
+                
                 <div className="mb-3">
                     <label htmlFor = "title">Title</label>
                     <Field name = "title" type="text" className="w-full py-3 px-4 border rounded" placeholder="Enter Task name"/>
@@ -74,7 +75,7 @@ const AddTaskPage = () => {
                     <ErrorMessage name='category' className='text-red-500' component={'p'}/>
                 </div>
                 <div>
-                    <CustomLoaderButton isLoading={loading} text={'Add Task'}/>
+                    <CustomLoaderButton isLoading={loading} text={'Update Task'}/>
                 </div>
             </Form>
         </Formik>
@@ -82,4 +83,4 @@ const AddTaskPage = () => {
   )
 }
 
-export default AddTaskPage
+export default TaskUpdateView
