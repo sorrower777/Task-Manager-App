@@ -107,12 +107,14 @@ The API runs at http://localhost:4500 (if PORT=4500).
 ```powershell
 cd FRONTED
 npm install
+# Optional: create .env.local with VITE_API_BASE_URL for local overrides
+# echo "VITE_API_BASE_URL=http://localhost:4500" > .env.local
 npm run dev
 ```
 
 Open the printed local URL (usually http://localhost:5173).
 
-> If you change the backend port, update `FRONTED/src/utils/axiosClient.js` `baseURL` to match (e.g., `http://localhost:3000/api/v1`).
+The frontend reads `VITE_API_BASE_URL` and appends `/api/v1` automatically. If the variable is not set, it defaults to `http://localhost:4500`.
 
 ## API overview
 
@@ -148,7 +150,43 @@ Task shape (simplified):
 ## Troubleshooting
 
 - 400 "Login First" or "Enter valid ID" → Ensure you’re sending `user: <token>` header. The value is the token returned by register/login.
-- Frontend can’t reach API → Confirm backend is running and `axiosClient.js` `baseURL` matches the backend port.
+- Frontend can’t reach API → Confirm backend is running and `VITE_API_BASE_URL` points to the backend host (the code appends `/api/v1`).
+
+## Deploy to Render
+
+This repo includes a `render.yaml` blueprint to deploy both services:
+
+- A Web Service for the API (`BACKEND/`) with Node
+- A Static Site for the frontend (`FRONTED/`)
+
+Quick steps:
+
+1) Push this repo to GitHub.
+2) In Render, New → Blueprint → point to the repo root.
+3) Render will detect `render.yaml` and create two services:
+   - `task-manager-api` (web): rootDir `BACKEND`, start `npm start`
+   - `task-manager-frontend` (static): rootDir `FRONTED`, build `npm install && npm run build`, publish `dist/`
+4) The blueprint wires `VITE_API_BASE_URL` in the Static Site to the Web Service URL, so the frontend calls the backend automatically. No hard-coded localhost in production.
+
+If you prefer manual setup instead of the blueprint:
+
+- Backend (Web Service)
+  - Root Directory: `BACKEND`
+  - Build Command: `npm install`
+  - Start Command: `npm start`
+  - Environment Variables: set `MONGO_URI` and optionally `PORT` (Render provides `PORT` automatically)
+
+- Frontend (Static Site)
+  - Root Directory: `FRONTED`
+  - Build Command: `npm install && npm run build`
+  - Publish Directory: `dist`
+  - Environment Variable: `VITE_API_BASE_URL` = your backend service URL (e.g., `https://task-manager-api.onrender.com`)
+
+Common Render error explained:
+
+> npm error Missing script: "dev"
+
+This happens when a Render service is pointed at the repo root and tries to run `npm run dev` where no such script exists. Fix by setting the Root Directory to `BACKEND` with Start Command `npm start`, or use the provided `render.yaml` blueprint.
 - Mongo connect issues → Validate `MONGO_URI` and that MongoDB is running.
 
 ## Roadmap (nice next steps)
