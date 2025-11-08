@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { UserModel } =  require("../src/models/user.model.js");
-const { TaskModel } = require("../src/models/task.model.js");
+const { UserModel } =  require("./models/user.model.js");
+const { TaskModel } = require("./models/task.model.js");
 const mongoose = require("mongoose");
 
 // register user
