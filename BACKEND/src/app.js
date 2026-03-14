@@ -1,6 +1,6 @@
-import cors from "cors"
-
-const express = require("express");
+import cors from "cors";
+import express from "express";
+// const express = require("express");
 const app = express();
 // const cors = require("cors");
 const morgan = require("morgan");
