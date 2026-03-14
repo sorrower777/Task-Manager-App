@@ -2,7 +2,7 @@ import cors from "cors"
 
 const express = require("express");
 const app = express();
-const cors = require("cors");
+// const cors = require("cors");
 const morgan = require("morgan");
 
 // CORS: allow custom 'user' header and handle preflight explicitly
