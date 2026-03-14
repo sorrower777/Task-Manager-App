@@ -1,27 +1,26 @@
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
-// const express = require("express");
+import routes from "./routes/index.js";
+
 const app = express();
-// const cors = require("cors");
-// const morgan = require("morgan");
 
-// CORS: allow custom 'user' header and handle preflight explicitly
+// CORS options
 const corsOptions = {
-	origin: true, // reflect request origin
-	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-	allowedHeaders: ["Content-Type", "user"],
-	credentials: false,
+  origin: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "user"],
+  credentials: false,
 };
+
 app.use(cors(corsOptions));
-app.use(cors());
-app.use(express.json({}));
-
-app.use(express.urlencoded({extended:false}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
-app.use("/api/v1/", require("./routes"))
 
-// Simple health check for uptime monitoring and cold-start debugging
+app.use("/api/v1", routes);
+
+// Health check
 app.get("/healthz", (req, res) => res.status(200).send("ok"));
 
-module.exports = app;
+export default app;
