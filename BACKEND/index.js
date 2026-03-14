@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import colors from "colors";
-import app from "./src/app.js";
+import app from "./src/app.js"
 import { ConnectDb } from "./src/db.config.js";
 
 dotenv.config({ path: ".env" });
